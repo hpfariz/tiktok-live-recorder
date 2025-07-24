@@ -21,5 +21,23 @@ def refresh_loop():
 if __name__ == "__main__":
     Thread(target=refresh_loop, daemon=True).start()
     Thread(target=run_recorder,  daemon=True).start()
+
+    def upload_loop():
+        while True:
+            run([
+                "rclone", "move",
+                str(SRC / "recordings"),            # local source
+                "drive:pop4u/jcayne_",              # ← desired Drive path
+                "--include", "*.mp4",
+                "--create-dirs",                    # makes pop4u/jcayne_ if missing
+                "--transfers", "4",
+                "--delete-empty-src-dirs",
+                "--bwlimit", "15M"
+            ])
+            time.sleep(15 * 60)                    # every 15 min
+
+    Thread(target=upload_loop, daemon=True).start()
+
+
     HTTPServer(("", int(os.getenv("PORT", 10000))),
                SimpleHTTPRequestHandler).serve_forever()
