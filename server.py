@@ -9,7 +9,7 @@ SRC  = ROOT / "src"
 def run_recorder():
     # run FROM the src directory, no extra args needed
     Popen(
-        ["python", "main.py", "-user", "ewc_en", "-mode", "automatic"],
+        ["python", "main.py", "-user", "jcayne_", "-mode", "automatic"],
         cwd=SRC                       # ← this makes cwd = src/
     )
 
