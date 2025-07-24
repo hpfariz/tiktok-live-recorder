@@ -195,7 +195,7 @@ class TikTokRecorder:
                 else:
                     self.output = self.output + "/"
 
-        output = f"{self.output if self.output else ''}TK_{user}_{current_date}_flv.mp4"
+        output = f"{self.output if self.output else ''}@{user}_{current_date}.mp4"
 
         if self.duration:
             logger.info(f"Started recording for {self.duration} seconds ")

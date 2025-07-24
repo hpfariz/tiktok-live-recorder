@@ -53,7 +53,7 @@ def parse_args():
         dest="automatic_interval",
         help="Sets the interval in minutes to check if the user is live in automatic mode. [Default: 5]",
         type=int,
-        default=5,
+        default=1,
         action='store'
     )
 
