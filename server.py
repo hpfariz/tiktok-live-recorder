@@ -1,11 +1,49 @@
 from threading import Thread
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from subprocess import Popen, run
-import os, time, pathlib
+import os, time, pathlib, io, zipfile, urllib.request, stat, sys
 
 ROOT = pathlib.Path(__file__).parent
 SRC  = ROOT / "src"
 RCLONE = ROOT / "bin" / "rclone"          
+BIN  = ROOT / "bin"
+
+BIN.mkdir(exist_ok=True)
+
+def ensure_rclone() -> str:
+    """Download the rclone binary into ./bin the first time the service starts."""
+    rclone_path = BIN / "rclone"
+    if rclone_path.exists():
+        return str(rclone_path)
+
+    urls = [
+        # primary mirror — GitHub’s releases CDN
+        "https://github.com/rclone/rclone/releases/latest/download/"
+        "rclone-current-linux-amd64.zip",
+        # fallback — rclone.org
+        "https://downloads.rclone.org/rclone-current-linux-amd64.zip",
+    ]
+    for url in urls:
+        for attempt in range(3):
+            try:
+                print(f"↙  Downloading rclone (try {attempt+1}/3) from", url,
+                      file=sys.stderr)
+                data = urllib.request.urlopen(url, timeout=120).read()
+                with zipfile.ZipFile(io.BytesIO(data)) as z:
+                    src = next(n for n in z.namelist() if n.endswith("/rclone"))
+                    extracted = z.extract(src, BIN)
+                    # move & chmod
+                    final = rclone_path
+                    pathlib.Path(extracted).rename(final)
+                    final.chmod(0o755)
+                    print("✓  rclone ready →", final, file=sys.stderr)
+                    return str(final)
+            except Exception as e:
+                print("⚠️  rclone fetch failed:", e, file=sys.stderr)
+                time.sleep(10)
+    raise RuntimeError("Could not fetch rclone from any mirror")
+
+RCLONE = ensure_rclone()                # ← executes once at startup
 
 def run_recorder():
     # run FROM the src directory, no extra args needed
@@ -27,7 +65,7 @@ if __name__ == "__main__":
     def upload_loop():
         while True:
             run([
-                str(RCLONE), "move",
+                RCLONE, "move",
                 str(SRC / "recordings"),
                 "drive:pop4u/jcayne_",
                 "--include", "*.mp4",
