@@ -7,16 +7,16 @@ ROOT = pathlib.Path(__file__).parent
 SRC  = ROOT / "src"
 
 def run_recorder():
-    Popen([
-        "python", SRC / "main.py",
-        "-user", "ewc_en", "-mode", "automatic",
-        "-cookies", SRC / "cookies.json"          # <— here
-    ])
+    # run FROM the src directory, no extra args needed
+    Popen(
+        ["python", "main.py", "-user", "ewc_en", "-mode", "automatic"],
+        cwd=SRC                       # ← this makes cwd = src/
+    )
 
 def refresh_loop():
     while True:
         run(["python", ROOT / "refresh_cookie.py"])
-        time.sleep(90 * 60)                      # every 90 min
+        time.sleep(90 * 60)           # refresh every 90 min
 
 if __name__ == "__main__":
     Thread(target=refresh_loop, daemon=True).start()
