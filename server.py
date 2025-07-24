@@ -5,6 +5,7 @@ import os, time, pathlib
 
 ROOT = pathlib.Path(__file__).parent
 SRC  = ROOT / "src"
+RCLONE = ROOT / "bin" / "rclone"          
 
 def run_recorder():
     # run FROM the src directory, no extra args needed
@@ -22,19 +23,20 @@ if __name__ == "__main__":
     Thread(target=refresh_loop, daemon=True).start()
     Thread(target=run_recorder,  daemon=True).start()
 
+
     def upload_loop():
         while True:
             run([
-                "rclone", "move",
-                str(SRC / "recordings"),            # local source
-                "drive:pop4u/jcayne_",              # ← desired Drive path
+                str(RCLONE), "move",
+                str(SRC / "recordings"),
+                "drive:pop4u/jcayne_",
                 "--include", "*.mp4",
-                "--create-dirs",                    # makes pop4u/jcayne_ if missing
+                "--create-dirs",
                 "--transfers", "4",
-                "--delete-empty-src-dirs",
-                "--bwlimit", "15M"
+                "--delete-empty-src-dirs"
             ])
-            time.sleep(15 * 60)                    # every 15 min
+            time.sleep(15 * 60)
+                   # every 15 min
 
     Thread(target=upload_loop, daemon=True).start()
 
