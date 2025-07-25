@@ -65,7 +65,6 @@ if __name__ == "__main__":
                 str(SRC / "recordings"),
                 "drive:pop4u/jcayne_",
                 "--include", "*.mp4",
-                "--create-dirs",
                 "--transfers", "4",
                 "--delete-empty-src-dirs"
             ])
