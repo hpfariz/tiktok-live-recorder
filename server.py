@@ -37,7 +37,7 @@ RECORDINGS_DIR.mkdir(parents=True, exist_ok=True)   # <<< Method A
 
 def run_recorder():
     Popen(
-        ["python", "main.py", "-user", "sheril05", "-mode", "automatic"],
+        ["python", "main.py", "-user", "bray19912", "-mode", "automatic"],
         cwd=SRC
     )
 
