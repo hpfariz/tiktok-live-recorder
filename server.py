@@ -17,18 +17,14 @@ def ensure_rclone() -> str:
         return str(rclone_path)
 
     urls = [
-        # primary mirror — GitHub’s releases CDN
-        "https://github.com/rclone/rclone/releases/latest/download/"
-        "rclone-current-linux-amd64.zip",
-        # fallback — rclone.org
-        "https://downloads.rclone.org/rclone-current-linux-amd64.zip",
+        "https://downloads.rclone.org/v1.70.3/rclone-v1.70.3-linux-amd64.zip"
     ]
     for url in urls:
         for attempt in range(3):
             try:
                 print(f"↙  Downloading rclone (try {attempt+1}/3) from", url,
                       file=sys.stderr)
-                data = urllib.request.urlopen(url, timeout=120).read()
+                data = urllib.request.urlopen(url, timeout=180).read()
                 with zipfile.ZipFile(io.BytesIO(data)) as z:
                     src = next(n for n in z.namelist() if n.endswith("/rclone"))
                     extracted = z.extract(src, BIN)
@@ -40,7 +36,7 @@ def ensure_rclone() -> str:
                     return str(final)
             except Exception as e:
                 print("⚠️  rclone fetch failed:", e, file=sys.stderr)
-                time.sleep(10)
+                time.sleep(15)
     raise RuntimeError("Could not fetch rclone from any mirror")
 
 RCLONE = ensure_rclone()                # ← executes once at startup
