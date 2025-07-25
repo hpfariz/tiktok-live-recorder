@@ -44,7 +44,7 @@ RCLONE = ensure_rclone()                # ← executes once at startup
 def run_recorder():
     # run FROM the src directory, no extra args needed
     Popen(
-        ["python", "main.py", "-user", "sebastiansaephan", "-mode", "automatic"],
+        ["python", "main.py", "-user", "sheril05", "-mode", "automatic"],
         cwd=SRC                       # ← this makes cwd = src/
     )
 
