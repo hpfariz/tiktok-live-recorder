@@ -8,6 +8,30 @@ SRC  = ROOT / "src"
 BIN  = ROOT / "bin"
 BIN.mkdir(exist_ok=True)
 
+def ensure_ffmpeg() -> str:
+    """Download a static ffmpeg binary into ./bin (once per container)."""
+    ffmpeg_path = BIN / "ffmpeg"
+    if ffmpeg_path.exists():
+        return str(ffmpeg_path)
+
+    url = ("https://github.com/icholy/ffmpeg-static/releases/latest/download/"
+           "ffmpeg-amd64")          # ~10 MB, no archive, direct binary
+    for attempt in range(3):
+        try:
+            print(f"↙  Downloading ffmpeg (try {attempt+1}/3)", file=sys.stderr)
+            data = urllib.request.urlopen(url, timeout=180).read()
+            ffmpeg_path.write_bytes(data)
+            ffmpeg_path.chmod(0o755)
+            print("✓  ffmpeg ready →", ffmpeg_path, file=sys.stderr)
+            return str(ffmpeg_path)
+        except Exception as e:
+            print("⚠️  ffmpeg fetch failed:", e, file=sys.stderr)
+            time.sleep(15)
+    raise RuntimeError("Could not fetch ffmpeg")
+
+FFMPEG = ensure_ffmpeg()
+os.environ["PATH"] = f"{BIN}:{os.environ['PATH']}"   # make ffmpeg/rclone discoverable
+
 def ensure_rclone() -> str:
     rclone_path = BIN / "rclone"
     if rclone_path.exists():
@@ -37,7 +61,7 @@ RECORDINGS_DIR.mkdir(parents=True, exist_ok=True)   # <<< Method A
 
 def run_recorder():
     Popen(
-        ["python", "main.py", "-user", "bray19912", "-mode", "automatic"],
+        ["python", "main.py", "-user", "gragalbert", "-mode", "automatic"],
         cwd=SRC
     )
 
