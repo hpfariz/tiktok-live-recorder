@@ -68,7 +68,8 @@ def run_recorder():
             "python", "main.py",
             "-user", "nadia",
             "-mode", "automatic",
-            "-output", "recordings"      #  ← NEW
+            "-output", "recordings",
+            "-format", "flv"
         ],
         cwd=SRC
     )
