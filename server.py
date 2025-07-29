@@ -82,15 +82,16 @@ def upload_loop():
     while True:
         print("DEBUG files in recordings:", list(RECORDINGS_DIR.iterdir()), file=sys.stderr)
         res = run([
-            RCLONE, "--log-level", "NOTICE",
+            RCLONE,
+            "--log-level", "NOTICE",
+            "--include", "*_final.mp4",
+            "--drive-pacer-min-sleep", "1s",
+            "--drive-pacer-burst", "5",
             "move",
             str(RECORDINGS_DIR),
             "drive:pop4u/jcayne_",
-            "--include", "*_final.mp4",
             "--transfers", "4",
-            "--delete-empty-src-dirs",
-            "--drive-pacer-min-sleep", "1s",
-            "--drive-pacer-burst", "5"
+            "--delete-empty-src-dirs"
         ])
         print("DEBUG rclone exited with", res.returncode, file=sys.stderr)
         time.sleep(5 * 60)
