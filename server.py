@@ -86,7 +86,9 @@ def upload_loop():
             "drive:pop4u/jcayne_",
             "--include", "*_final.mp4",
             "--transfers", "4",
-            "--delete-empty-src-dirs"
+            "--delete-empty-src-dirs",
+            "--drive-pacer-min-sleep", "1s",
+            "--drive-pacer-burst", "5"
         ])
         time.sleep(15 * 60)
 
