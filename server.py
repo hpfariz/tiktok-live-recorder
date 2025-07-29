@@ -96,9 +96,9 @@ def upload_loop():
 # 5.  Kick everything off
 # --------------------------------------------------------------------------- #
 if __name__ == "__main__":
+    print("DEBUG ENV", {k: v[:60] for k, v in os.environ.items() if k.startswith("RCLONE")}, file=sys.stderr)
     Thread(target=refresh_loop, daemon=True).start()
     Thread(target=run_recorder,  daemon=True).start()
-    print("DEBUG ENV", {k: v[:60] for k, v in os.environ.items() if k.startswith("RCLONE")}, file=sys.stderr)
     Thread(target=upload_loop,   daemon=True).start()
 
     HTTPServer(("", int(os.getenv("PORT", 10000))),
