@@ -81,7 +81,8 @@ def refresh_loop():
 def upload_loop():
     while True:
         run([
-            RCLONE, "move",
+            RCLONE, "--log-level", "NOTICE",
+            "move",
             str(RECORDINGS_DIR),
             "drive:pop4u/jcayne_",
             "--include", "*_final.mp4",
@@ -116,6 +117,12 @@ if __name__ == "__main__":
             print("DEBUG  wrote rclone.conf with Drive token", file=sys.stderr)
         except Exception as e:
             print("ERROR  token decode failed:", e, file=sys.stderr)
+
+    try:
+        run([RCLONE, "lsf", "drive:", "--max-depth", "1"], check=True)
+        print("DEBUG  rclone self-test OK – Drive remote is accessible", file=sys.stderr)
+    except Exception as e:
+        print("ERROR  rclone self-test FAILED:", e, file=sys.stderr)
     # ----------------------------------------------------------------
 
     Thread(target=refresh_loop, daemon=True).start()
