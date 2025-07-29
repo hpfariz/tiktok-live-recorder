@@ -35,7 +35,7 @@ class VideoManagement:
 
         try:
             ffmpeg.input(file).output(
-                file.replace('_flv.mp4', '.mp4'),
+                file.replace('_flv.mp4', '_final.mp4'),
                 c='copy',
                 y='-y',
             ).run(quiet=True)
