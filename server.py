@@ -66,7 +66,7 @@ def run_recorder():
     Popen(
         [
             "python", "main.py",
-            "-user", "julianuz27",
+            "-user", "whosmarully",
             "-mode", "automatic",
             "-output", "recordings"
         ],
