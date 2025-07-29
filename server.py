@@ -66,10 +66,9 @@ def run_recorder():
     Popen(
         [
             "python", "main.py",
-            "-user", "nadia",
+            "-user", "iuckyzeal",
             "-mode", "automatic",
-            "-output", "recordings",
-            "-format", "flv"
+            "-output", "recordings"
         ],
         cwd=SRC
     )
@@ -85,7 +84,7 @@ def upload_loop():
             RCLONE, "move",
             str(RECORDINGS_DIR),
             "drive:pop4u/jcayne_",
-            "--include", "*.mp4",
+            "--include", "*_final.mp4",
             "--transfers", "4",
             "--delete-empty-src-dirs"
         ])
