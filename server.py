@@ -66,7 +66,7 @@ def run_recorder():
     Popen(
         [
             "python", "main.py",
-            "-user", "whosmarully",
+            "-user", "oydoy77",
             "-mode", "automatic",
             "-output", "recordings"
         ],
@@ -80,7 +80,8 @@ def refresh_loop():
 
 def upload_loop():
     while True:
-        run([
+        print("DEBUG files in recordings:", list(RECORDINGS_DIR.iterdir()), file=sys.stderr)
+        res = run([
             RCLONE, "--log-level", "NOTICE",
             "move",
             str(RECORDINGS_DIR),
@@ -91,7 +92,8 @@ def upload_loop():
             "--drive-pacer-min-sleep", "1s",
             "--drive-pacer-burst", "5"
         ])
-        time.sleep(15 * 60)
+        print("DEBUG rclone exited with", res.returncode, file=sys.stderr)
+        time.sleep(5 * 60)
 
 # --------------------------------------------------------------------------- #
 # 5.  Kick everything off
