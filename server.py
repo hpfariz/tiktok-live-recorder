@@ -97,6 +97,27 @@ def upload_loop():
 # --------------------------------------------------------------------------- #
 if __name__ == "__main__":
     print("DEBUG ENV", {k: v[:60] for k, v in os.environ.items() if k.startswith("RCLONE")}, file=sys.stderr)
+
+    # ---------- create explicit rclone.conf --------------------------
+    token_json = os.environ.get("RCLONE_CONFIG_DRIVE_TOKEN_BASE64")
+    if token_json:
+        import base64, json, pathlib
+        try:
+            decoded = base64.b64decode(token_json).decode()
+            json.loads(decoded)                      # validate
+            cfg_dir = pathlib.Path.home() / ".config" / "rclone"
+            cfg_dir.mkdir(parents=True, exist_ok=True)
+            (cfg_dir / "rclone.conf").write_text(
+                "[drive]\n"
+                "type = drive\n"
+                "scope = drive\n"
+                f"token = {decoded}\n"
+            )
+            print("DEBUG  wrote rclone.conf with Drive token", file=sys.stderr)
+        except Exception as e:
+            print("ERROR  token decode failed:", e, file=sys.stderr)
+    # ----------------------------------------------------------------
+
     Thread(target=refresh_loop, daemon=True).start()
     Thread(target=run_recorder,  daemon=True).start()
     Thread(target=upload_loop,   daemon=True).start()
