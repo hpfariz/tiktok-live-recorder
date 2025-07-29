@@ -81,9 +81,13 @@ def refresh_loop():
 def upload_loop():
     while True:
         print("DEBUG files in recordings:", list(RECORDINGS_DIR.iterdir()), file=sys.stderr)
+        CFG_PATH = str((pathlib.Path.home() / ".config" / "rclone" / "rclone.conf").resolve())
+
         res = run([
             RCLONE,
-            "--log-level", "NOTICE",
+            "--config", CFG_PATH,
+            "--log-level", "INFO",
+            "--progress",
             "--include", "*_final.mp4",
             "--drive-pacer-min-sleep", "1s",
             "--drive-pacer-burst", "5",
@@ -93,6 +97,7 @@ def upload_loop():
             "--transfers", "4",
             "--delete-empty-src-dirs"
         ])
+        
         print("DEBUG rclone exited with", res.returncode, file=sys.stderr)
         time.sleep(5 * 60)
 
