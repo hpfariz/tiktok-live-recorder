@@ -86,15 +86,16 @@ def upload_loop():
         res = run([
             RCLONE,
             "--config", CFG_PATH,
-            "--log-level", "INFO",
-            "--progress",
-            "--include", "*_final.mp4",
-            "--drive-pacer-min-sleep", "1s",
-            "--drive-pacer-burst", "5",
+            "--drive-chunk-size", "32M",   # default 8M is fine; 32M is still safe
+            "--tpslimit", "4",             # 4 writes/sec max
+            "--drive-pacer-min-sleep", "2s",
+            "--drive-pacer-burst", "4",
+            "--retries", "10",
+            "--low-level-retries", "20",
             "move",
             str(RECORDINGS_DIR),
             "drive:pop4u/jcayne_",
-            "--transfers", "4",
+            "--transfers", "1",
             "--delete-empty-src-dirs"
         ])
         
