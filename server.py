@@ -110,17 +110,21 @@ if __name__ == "__main__":
 
     # ---------- create explicit rclone.conf --------------------------
     token_json = os.environ.get("RCLONE_CONFIG_DRIVE_TOKEN_BASE64")
+    client_id = os.environ.get("RCLONE_CONFIG_DRIVE_CLIENT_ID","").strip()
+    client_sec = os.environ.get("RCLONE_CONFIG_DRIVE_CLIENT_SECRET","").strip()
     if token_json:
         import base64, json, pathlib
         try:
             decoded = base64.b64decode(token_json).decode()
-            json.loads(decoded)                      # validate
+            json.loads(decoded)
             cfg_dir = pathlib.Path.home() / ".config" / "rclone"
             cfg_dir.mkdir(parents=True, exist_ok=True)
             (cfg_dir / "rclone.conf").write_text(
                 "[drive]\n"
                 "type = drive\n"
                 "scope = drive\n"
+                f"client_id = {client_id}\n"
+                f"client_secret = {client_sec}\n"
                 f"token = {decoded}\n"
             )
             print("DEBUG  wrote rclone.conf with Drive token", file=sys.stderr)
@@ -128,7 +132,7 @@ if __name__ == "__main__":
             print("ERROR  token decode failed:", e, file=sys.stderr)
 
     try:
-        run([RCLONE, "lsf", "drive:", "--max-depth", "1"], check=True)
+        run([RCLONE, "lsf", "-vv", "drive:", "--max-depth", "1"], check=True)
         print("DEBUG  rclone self-test OK – Drive remote is accessible", file=sys.stderr)
     except Exception as e:
         print("ERROR  rclone self-test FAILED:", e, file=sys.stderr)
