@@ -4,7 +4,9 @@
 
 <em>TikTok Live Recorder is a tool for recording live streaming tiktok.</em>
 
-![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) [![Licence](https://img.shields.io/github/license/Ileriayo/markdown-badges?style=for-the-badge)](./LICENSE)
+[![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/tiktokliverecorder)
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) 
+[![Licence](https://img.shields.io/github/license/Ileriayo/markdown-badges?style=for-the-badge)](./LICENSE)
 
 The TikTok Live Recorder is a tool designed to easily capture and save live streaming sessions from TikTok. It records both audio and video, allowing users to revisit and preserve engaging live content for later enjoyment and analysis. It's a valuable resource for creators, researchers, and anyone who wants to capture memorable moments from TikTok live streams.
 
@@ -17,13 +19,13 @@ The TikTok Live Recorder is a tool designed to easily capture and save live stre
 
   <h1> How To Use </h1>
 
-- [Install on Windows & Linux 💻](#install-on-windows--linux-)
+- [Install on Windows & Linux 💻](#install-on-windows-)
+- [Install on Linux 💻](#install-on-linux-)
 - [Install on Android 📱](#install-on-android-)
 
 </div>
 
-
-## Install on Windows & Linux 💻
+## Install on Windows 💻
 
 To clone and run this application, you'll need [Git](https://git-scm.com) and [Python3](https://www.python.org/downloads/) and [FFmpeg](https://www.youtube.com/watch?v=OlNWCpFdVMA) installed on your computer. From your command line:
 
@@ -41,9 +43,30 @@ $ cd tiktok-live-recorder
 # Go into the source code
 $ cd src
 # Install dependencies
-$ pip install -r requirements.txt --break-system-packages
+$ pip install -r requirements.txt
 # Run the app on windows
 $ python main.py -h
+  ```
+
+## Install on Linux 🐧
+
+To clone and run this application, you'll need [Git](https://git-scm.com) and [Python3](https://www.python.org/downloads/) and [FFmpeg](https://ffmpeg.org/download.html#build-linux) installed on your computer. From your command line:
+
+<!-- <img src="https://i.ibb.co/8DkzXZn/image.png" alt="image" border="0"> -->
+
+<be>
+
+</div>
+
+  ```bash
+# Clone this repository
+$ git clone https://github.com/Michele0303/tiktok-live-recorder
+# Go into the repository
+$ cd tiktok-live-recorder
+# Go into the source code
+$ cd src
+# Install dependencies
+$ pip install -r requirements.txt --break-system-packages
 # Run the app on linux
 $ python3 main.py -h
   ```
